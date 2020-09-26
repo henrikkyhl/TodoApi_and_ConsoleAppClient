@@ -28,13 +28,22 @@ namespace TodoApi
             // In-memory database:
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoDb"));
 
-            // Register TodoItem repository for dependency injection:
+            // Register TodoItem repository for dependency injection.
             services.AddScoped<IRepository<TodoItem>, TodoItemRepository>();
 
-            // Register database initializer for dependency injection:
+            // Register database initializer for dependency injection.
             services.AddTransient<IDbInitializer, DbInitializer>();
 
-            // Register the Swagger generator using Swashbuckle:
+            // Configure the default CORS policy.
+            services.AddCors(options =>
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    })
+            );
+
+            // Register the Swagger generator using Swashbuckle.
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -56,20 +65,19 @@ namespace TodoApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // Initialize the database
+            // Initialize the database.
             using (var scope = app.ApplicationServices.CreateScope())
             {
-                // Initialize the database
                 var services = scope.ServiceProvider;
                 var dbContext = services.GetService<TodoContext>();
                 var dbInitializer = services.GetService<IDbInitializer>();
                 dbInitializer.Initialize(dbContext);
             }
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint:
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
-            // Enable middleware to serve SwaggerUI, specifying the Swagger JSON endpoint:
+            // Enable middleware to serve SwaggerUI, specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
@@ -84,6 +92,9 @@ namespace TodoApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // Enable CORS (after UseRouting and before UseAuthorization).
+            app.UseCors();
 
             app.UseAuthorization();
 

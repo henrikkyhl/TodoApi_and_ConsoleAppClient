@@ -20,7 +20,7 @@
     "TodoApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "todo",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
