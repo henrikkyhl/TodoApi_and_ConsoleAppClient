@@ -23,10 +23,19 @@ namespace TodoApi
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services, IWebHostEnvironment env)
         {
-            // In-memory database:
-            services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoDb"));
+            if (env.IsDevelopment())
+            {
+                // In-memory database:
+                services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoDb"));
+            }
+            else
+            {
+                // Azure SQL database:
+                services.AddDbContext<TodoContext>(opt =>
+                         opt.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
+            }
 
             // Register TodoItem repository for dependency injection.
             services.AddScoped<IRepository<TodoItem>, TodoItemRepository>();
@@ -82,7 +91,6 @@ namespace TodoApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-
 
             if (env.IsDevelopment())
             {
