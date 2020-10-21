@@ -9,13 +9,19 @@ namespace TodoApi.Data
         // This method will create and seed the database.
         public void Initialize(TodoContext context)
         {
-            // Delete the database, if it already exists. I do this because an
-            // existing database may not be compatible with the entity model,
-            // if the entity model was changed since the database was created.
-            context.Database.EnsureDeleted();
+            // Delete the database, if it already exists.
+            // It seems that this operation will cause the application to exit with
+            // an error, when a free Azure SQL Server database is used. For that
+            // reason, I have commented it out.
+            // This means that when you make changes to the entity model, you must
+            // manually delete all the database tables before you re-publish the
+            // application to your Azure Web App. Alternatively, you can create a
+            // new Azure "Web App + SQL" and re-publis to it.
+            // context.Database.EnsureDeleted();
 
             // Create the database, if it does not already exists. This operation
-            // is necessary, if you use an SQL Server database.
+            // is necessary, if you use an SQL Server database. The method does not
+            // check, if the entity model was changed since the database was created.
             context.Database.EnsureCreated();
 
             // Look for any TodoItems
