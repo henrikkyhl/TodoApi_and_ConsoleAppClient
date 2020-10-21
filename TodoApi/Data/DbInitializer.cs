@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using TodoApi.Models;
 
 namespace TodoApi.Data
@@ -9,25 +10,18 @@ namespace TodoApi.Data
         // This method will create and seed the database.
         public void Initialize(TodoContext context)
         {
-            // Delete the database, if it already exists.
-            // It seems that this operation will cause the application to exit with
-            // an error, when a free Azure SQL Server database is used. For that
-            // reason, I have commented it out.
-            // This means that when you make changes to the entity model, you must
-            // manually delete all the database tables before you re-publish the
-            // application to your Azure Web App. Alternatively, you can create a
-            // new Azure "Web App + SQL" and re-publis to it.
-            // context.Database.EnsureDeleted();
-
-            // Create the database, if it does not already exists. This operation
-            // is necessary, if you use an SQL Server database. The method does not
-            // check, if the entity model was changed since the database was created.
+            // Create the database, if it does not already exists. If the database
+            // already exists, no action is taken (and no effort is made to ensure it
+            // is compatible with the model for this context).
             context.Database.EnsureCreated();
 
             // Look for any TodoItems
             if (context.TodoItems.Any())
             {
-                return;   // DB has been seeded
+                // Delete and re-create the database, if it had already been created.
+                // You must delete all the tables in the database.
+                context.Database.ExecuteSqlRaw("DROP TABLE TodoItems");
+                context.Database.EnsureCreated();
             }
 
             List<TodoItem> items = new List<TodoItem>
@@ -37,8 +31,6 @@ namespace TodoApi.Data
 
             context.TodoItems.AddRange(items);
             context.SaveChanges();
-
         }
-
     }
 }
