@@ -29,21 +29,26 @@ namespace TodoApi
         {
             if (Environment.IsDevelopment())
             {
-                // In-memory database:
-                services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoDb"));
+                // SqLite database:
+                services.AddDbContext<TodoContext>(opt =>
+                    opt.UseSqlite("Data Source=TodoDb.db"), ServiceLifetime.Transient);
+                // Register SqLite database initializer for dependency injection.
+                services.AddTransient<IDbInitializer, SqLiteDbInitializer>();
+
             }
             else
             {
                 // Azure SQL database:
                 services.AddDbContext<TodoContext>(opt =>
-                         opt.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
+                         opt.UseSqlServer(Configuration.GetConnectionString("defaultConnection")),
+                         ServiceLifetime.Transient);
+                // Register SQL Server database initializer for dependency injection.
+                services.AddTransient<IDbInitializer, SqlServerDbInitializer>();
+
             }
 
             // Register TodoItem repository for dependency injection.
             services.AddScoped<IRepository<TodoItem>, TodoItemRepository>();
-
-            // Register database initializer for dependency injection.
-            services.AddTransient<IDbInitializer, DbInitializer>();
 
             // Configure the default CORS policy.
             services.AddCors(options =>
@@ -81,6 +86,12 @@ namespace TodoApi
             {
                 var services = scope.ServiceProvider;
                 var dbContext = services.GetService<TodoContext>();
+
+                //if (env.IsDevelopment())
+                //{
+                //    dbContext.Database.EnsureDeleted();
+                //}
+
                 var dbInitializer = services.GetService<IDbInitializer>();
                 dbInitializer.Initialize(dbContext);
             }
