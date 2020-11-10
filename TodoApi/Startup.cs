@@ -86,12 +86,6 @@ namespace TodoApi
             {
                 var services = scope.ServiceProvider;
                 var dbContext = services.GetService<TodoContext>();
-
-                //if (env.IsDevelopment())
-                //{
-                //    dbContext.Database.EnsureDeleted();
-                //}
-
                 var dbInitializer = services.GetService<IDbInitializer>();
                 dbInitializer.Initialize(dbContext);
             }
