@@ -31,7 +31,7 @@ namespace TodoApi
             {
                 // SqLite database:
                 services.AddDbContext<TodoContext>(opt =>
-                    opt.UseSqlite("Data Source=TodoDb.db"), ServiceLifetime.Transient);
+                    opt.UseSqlite("Data Source=TodoDb.db"));
                 // Register SqLite database initializer for dependency injection.
                 services.AddTransient<IDbInitializer, SqLiteDbInitializer>();
 
@@ -40,8 +40,7 @@ namespace TodoApi
             {
                 // Azure SQL database:
                 services.AddDbContext<TodoContext>(opt =>
-                         opt.UseSqlServer(Configuration.GetConnectionString("defaultConnection")),
-                         ServiceLifetime.Transient);
+                         opt.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
                 // Register SQL Server database initializer for dependency injection.
                 services.AddTransient<IDbInitializer, SqlServerDbInitializer>();
 
