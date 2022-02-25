@@ -11,50 +11,51 @@ namespace TodoClient
         // the project on the built-in Kestrel web server or IIS Express
         // (the last one is only available if you are running Visual
         // Studio on Windows)
-        string baseAddress = "https://localhost:5001/Todo";
+        const string baseAddress = "https://localhost:5001/Todo";
+        Uri baseUri = new Uri(baseAddress);
 
-        RestClient c = new RestClient();
+        RestClient c = new RestClient(baseAddress);
 
-        public ServiceGateway()
-        {
-            c.BaseUrl = new Uri(baseAddress);
-        }
 
         public IEnumerable<TodoItem> GetItems()
         {
-            var request = new RestRequest(Method.GET);
-            var response = c.Execute<List<TodoItem>>(request);
-            return response.Data;
+            var request = new RestRequest();
+            var response = c.GetAsync<List<TodoItem>>(request);
+            response.Wait();
+            return response.Result;
         }
 
         public TodoItem GetItem(long id)
         {
-            var request = new RestRequest(id.ToString(), Method.GET);
-            var response = c.Execute<TodoItem>(request);
-            return response.Data;
+            var request = new RestRequest(id.ToString());
+            var response = c.GetAsync<TodoItem>(request);
+            response.Wait();
+            return response.Result;
         }
 
         public bool CreateItem(TodoItem item)
         {
-            var request = new RestRequest(Method.POST);
-            request.AddJsonBody(item);
-            var response = c.Execute(request);
-            return response.IsSuccessful;
+            var request = new RestRequest().AddJsonBody(item);
+            var response = c.PostAsync(request);
+            response.Wait();
+            return response.IsCompletedSuccessfully;
         }
 
         public bool UpdateItem(TodoItem item)
         {
-            var request = new RestRequest(item.Id.ToString(), Method.PUT);
+            var request = new RestRequest(item.Id.ToString());
             request.AddJsonBody(item);
-            var response = c.Execute(request);
-            return response.IsSuccessful;
+            var response = c.PutAsync(request);
+            response.Wait();
+            return response.IsCompletedSuccessfully;
         }
 
         public bool DeleteItem(long id)
         {
-            var request = new RestRequest(id.ToString(), Method.DELETE);
-            var response = c.Execute(request);
-            return response.IsSuccessful;
+            var request = new RestRequest(id.ToString());
+            var response = c.DeleteAsync(request);
+            response.Wait();
+            return response.IsCompletedSuccessfully;
         }
     }
 }

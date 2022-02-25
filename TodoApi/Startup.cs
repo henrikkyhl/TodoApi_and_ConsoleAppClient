@@ -34,7 +34,6 @@ namespace TodoApi
                     opt.UseSqlite("Data Source=TodoDb.db"));
                 // Register SqLite database initializer for dependency injection.
                 services.AddTransient<IDbInitializer, SqLiteDbInitializer>();
-
             }
             else
             {
@@ -43,7 +42,6 @@ namespace TodoApi
                          opt.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
                 // Register SQL Server database initializer for dependency injection.
                 services.AddTransient<IDbInitializer, SqlServerDbInitializer>();
-
             }
 
             // Register TodoItem repository for dependency injection.

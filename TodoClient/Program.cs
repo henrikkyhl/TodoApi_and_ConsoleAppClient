@@ -10,7 +10,6 @@ namespace TodoClient
 
             var newItem = new TodoItem
             {
-                Id = 2,
                 Name = "Test",
                 IsComplete = true
             };
