@@ -35,7 +35,8 @@ namespace TodoClient
 
         public bool CreateItem(TodoItem item)
         {
-            var request = new RestRequest().AddJsonBody(item);
+            var request = new RestRequest();
+            request.AddJsonBody(item);
             var response = c.PostAsync(request);
             response.Wait();
             return response.IsCompletedSuccessfully;
