@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using RestSharp;
+﻿using RestSharp;
 
 namespace TodoClient
 {
@@ -12,7 +9,6 @@ namespace TodoClient
         // (the last one is only available if you are running Visual
         // Studio on Windows)
         const string baseAddress = "https://localhost:5001/Todo";
-        Uri baseUri = new Uri(baseAddress);
 
         RestClient c = new RestClient(baseAddress);
 
