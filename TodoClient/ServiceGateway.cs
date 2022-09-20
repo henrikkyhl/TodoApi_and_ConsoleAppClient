@@ -28,7 +28,7 @@ namespace TodoClient
             response.Wait();
             return response.Result;
         }
-
+        
         public bool CreateItem(TodoItem item)
         {
             var request = new RestRequest();

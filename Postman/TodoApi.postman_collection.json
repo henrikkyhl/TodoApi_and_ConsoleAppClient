@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "20ade6f6-eb64-4be5-8f34-bdfaa0cc1754",
 		"name": "TodoApi",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2647456"
 	},
 	"item": [
 		{
@@ -56,7 +57,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": 2,\n    \"name\": \"Learn ASP.NET Core Web API\",\n    \"isComplete\": false\n}"
+					"raw": "{\n    \"id\": 3,\n    \"name\": \"Learn ASP.NET Core Web API\",\n    \"isComplete\": false\n}"
 				},
 				"url": {
 					"raw": "https://localhost:5001/todo",
@@ -121,6 +122,5 @@
 			},
 			"response": []
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
