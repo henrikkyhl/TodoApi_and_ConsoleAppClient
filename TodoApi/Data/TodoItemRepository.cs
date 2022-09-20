@@ -21,7 +21,7 @@ namespace TodoApi.Data
 
         public TodoItem Get(long id)
         {
-            return db.TodoItems.FirstOrDefault(b => b.Id == id);
+            return db.TodoItems.Find(id);
         }
 
         public void Add(TodoItem entity)
@@ -38,7 +38,7 @@ namespace TodoApi.Data
 
         public void Remove(long id)
         {
-            var item = db.TodoItems.FirstOrDefault(b => b.Id == id);
+            var item = db.TodoItems.Find(id);
             db.TodoItems.Remove(item);
             db.SaveChanges();
         }
